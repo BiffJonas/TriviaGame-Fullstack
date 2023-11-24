@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 namespace server.Controllers
 {
     [ApiController]
@@ -12,6 +13,7 @@ namespace server.Controllers
             this.dbHandler = dbHandler;
         }
         [HttpGet]
+        [EnableCors("_myAllowSpecificOrigins")]
         public IActionResult GetCards()
         {
             var cards = dbHandler.GetCards();
