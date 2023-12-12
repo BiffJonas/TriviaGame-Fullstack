@@ -25,5 +25,3 @@ window.onload = function () {
         }
     });
 };
-//TODO refactor gamerender, gamehandler into classes
-// you should do this frontend in vanilla js
