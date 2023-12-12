@@ -16,5 +16,24 @@ namespace server.Controllers
         {
             return dbContext.Cards.ToList();
         }
+        public List<AltQuestionCard> GetAltCards()
+        {
+            return dbContext.AltCards.ToList();
+        }
+        public void AddCard(QuestionCard card)
+        {
+            dbContext.Cards.Add(card);
+            dbContext.SaveChanges();
+        }
+        public void AddAltCard(AltQuestionCard card)
+        {   
+            //check for dupliacate
+            //validate input
+            //has to be a question
+            //svaret måste finnas i alternatives
+            //de måste finnas 4 alternativ
+            dbContext.AltCards.Add(card);
+            dbContext.SaveChanges();
+        }
     }
 }

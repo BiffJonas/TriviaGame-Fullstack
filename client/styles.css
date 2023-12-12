@@ -1,0 +1,29 @@
+body {
+	display: grid;
+	place-content: center;
+	height: 100vh;
+	margin: 0;
+}
+
+.question-container {
+	text-align: center;
+}
+
+.quiz-area {
+	width: 750px;
+	height: 400px;
+	border: 1px solid #ccc;
+	overflow: auto;
+}
+
+.control-btn {
+	margin-top: 1em;
+}
+
+.button-area button {
+	width: 40%;
+	height: 40%;
+	font-size: large;
+	font-family: bold;
+	margin: 0.1em;
+}

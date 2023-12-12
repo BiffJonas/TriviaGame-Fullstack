@@ -18,6 +18,7 @@ namespace server.Data
             options.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
         }
         public DbSet<QuestionCard> Cards { get; set; }
+        public DbSet<AltQuestionCard> AltCards { get; set; }
     }
 
 }

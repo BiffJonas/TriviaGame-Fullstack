@@ -14,10 +14,34 @@ namespace server.Controllers
         }
         [HttpGet]
         [EnableCors("_myAllowSpecificOrigins")]
-        public IActionResult GetCards()
+        public IActionResult GetAltCards()
         {
-            var cards = dbHandler.GetCards();
+            var cards = dbHandler.GetAltCards();
             return Ok(cards);
+        }
+        //[HttpPost]
+        //[EnableCors("_myAllowSpecificOrigins")]
+        //public IActionResult AddCardToDatabase([FromBody] QuestionCard card)
+        //{
+        //    if (card == null)
+        //    {
+        //        return BadRequest("Invalid card data");
+        //    }
+
+        //    dbHandler.AddCard(card);
+        //    return Ok();
+        //}
+        [HttpPost]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public IActionResult AddCardToDatabase([FromBody] AltQuestionCard card)
+        {
+            if (card == null)
+            {
+                return BadRequest("Invalid card data");
+            }
+
+            dbHandler.AddAltCard(card);
+            return Ok();
         }
     }
 }
