@@ -92,10 +92,14 @@ export class Gamehandler {
         };
         this.startQuiz = () => __awaiter(this, void 0, void 0, function* () {
             console.log("Quiz started");
-            this.gameRender.questions = yield this.dbContext.getShuffledQustions();
             console.log(this.catagory);
             if (this.catagory) {
-                this.gameRender.questions = this.gameRender.questions.filter((question) => question.catagory === this.catagory);
+                this.gameRender.questions =
+                    yield this.dbContext.getCatagoryQuestions(this.catagory);
+            }
+            else {
+                this.gameRender.questions =
+                    yield this.dbContext.getShuffledQustions();
             }
             this.currentQuestion = this.gameRender.questions[0];
             this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion, this.gameRender.questions);

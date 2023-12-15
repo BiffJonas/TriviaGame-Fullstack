@@ -8,6 +8,11 @@ export class DbContext {
 		if (!response.ok) throw new Error("Failed fetching data");
 		return response.json();
 	};
+	getCatagoryQuestions = async (catagory: string): Promise<Question[]> => {
+		const response = await fetch(this.url + "catagory/" + catagory);
+		if (!response.ok) throw new Error("failed fetching catagory");
+		return await response.json();
+	};
 	getShuffledQustions = async (): Promise<Question[]> => {
 		const response = await fetch(this.url + "shuffle");
 		if (!response.ok) throw new Error("Failed fetching shuffled questions");

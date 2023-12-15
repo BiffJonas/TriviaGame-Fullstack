@@ -16,6 +16,12 @@ export class DbContext {
                 throw new Error("Failed fetching data");
             return response.json();
         });
+        this.getCatagoryQuestions = (catagory) => __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(this.url + "catagory/" + catagory);
+            if (!response.ok)
+                throw new Error("failed fetching catagory");
+            return yield response.json();
+        });
         this.getShuffledQustions = () => __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch(this.url + "shuffle");
             if (!response.ok)

@@ -42,5 +42,9 @@ namespace server.Controllers
             dbContext.SaveChanges();
         }
 
+        public List<AltQuestionCard> GetCardsByCatagory(string catagory)
+        {
+            return dbContext.AltCards.Where(card => card.Catagory == catagory).ToList();
+        }
     }
 }

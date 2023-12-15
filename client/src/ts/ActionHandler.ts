@@ -128,12 +128,13 @@ export class Gamehandler {
 	startQuiz = async () => {
 		console.log("Quiz started");
 
-		this.gameRender.questions = await this.dbContext.getShuffledQustions();
 		console.log(this.catagory);
 		if (this.catagory) {
-			this.gameRender.questions = this.gameRender.questions.filter(
-				(question) => question.catagory === this.catagory
-			);
+			this.gameRender.questions =
+				await this.dbContext.getCatagoryQuestions(this.catagory);
+		} else {
+			this.gameRender.questions =
+				await this.dbContext.getShuffledQustions();
 		}
 
 		this.currentQuestion = this.gameRender.questions[0];

@@ -36,6 +36,13 @@ namespace server.Controllers
             if(card == null) return NotFound("No card by that id");
             return Ok(card);
         }
+        [HttpGet("catagory/{catagory}")]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public IActionResult GetCardsByCatagory(string catagory){
+            List<AltQuestionCard> cards = dbHandler.GetCardsByCatagory(catagory);
+            return Ok(cards);
+        }
+        
         //[HttpPost]
         //[EnableCors("_myAllowSpecificOrigins")]
         //public IActionResult AddCardToDatabase([FromBody] QuestionCard card)
