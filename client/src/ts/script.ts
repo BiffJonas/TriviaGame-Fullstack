@@ -7,11 +7,11 @@ window.onload = async function () {
 	const questions: Question[] = await dbContext.getAllQuestions();
 	console.log(questions);
 
-	const gameRender = new GameRender(questions);
-	const gamehandler = new Gamehandler(gameRender);
+	const gameHandler = new Gamehandler(questions);
+	const gameRender = new GameRender(questions, gameHandler);
 	try {
-		gamehandler.initEventListeners();
+		gameHandler.initEventListeners();
 	} catch (error) {
-		gamehandler.handleError(error);
+		gameHandler.handleError(error);
 	}
 };

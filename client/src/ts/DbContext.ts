@@ -21,7 +21,7 @@ export class DbContext {
 		return await response.json();
 	};
 	postNewQuestion = async (question: Question) => {
-		const response = await fetch(this.url, {
+		const response = await fetch(this.url + "addcard", {
 			method: "POST",
 			headers: { "Content-type": "application/json" },
 			body: JSON.stringify(question),

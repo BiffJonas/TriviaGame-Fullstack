@@ -30,7 +30,7 @@ export class DbContext {
             return yield response.json();
         });
         this.postNewQuestion = (question) => __awaiter(this, void 0, void 0, function* () {
-            const response = yield fetch(this.url, {
+            const response = yield fetch(this.url + "addcard", {
                 method: "POST",
                 headers: { "Content-type": "application/json" },
                 body: JSON.stringify(question),

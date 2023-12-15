@@ -1,6 +1,5 @@
-import { Gamehandler } from "./ActionHandler.js";
 export class GameRender {
-    constructor(questions) {
+    constructor(questions, gameHandler) {
         this.validateAnswer = (userAnswer, correctAnswer) => {
             const score = document.querySelector(".score--state-count");
             if (!score)
@@ -18,9 +17,9 @@ export class GameRender {
 							<button class="btn btn-success">animals</button>
 							<button class="btn btn-success">Teachers</button>
 							<button class="btn btn-success">Math</button>`;
-            const gamehandler = new Gamehandler(this);
-            gamehandler.initCatagoryButtons();
+            this.gameHandler.initCatagoryButtons();
         };
+        this.gameHandler = gameHandler;
         this.questions = questions;
         this.points = 0;
     }

@@ -6,11 +6,13 @@ import { AnswerData } from "./AnswerData";
 export class Gamehandler {
 	gameRender: GameRender;
 	currentQuestion: Question | undefined;
+	questions: Question[];
 	dbContext: DbContext;
 	catagory?: string;
 
-	constructor(gameRender: GameRender) {
-		this.gameRender = gameRender;
+	constructor(questions: Question[]) {
+		this.questions = questions;
+		this.gameRender = new GameRender(this.questions, this);
 		this.dbContext = new DbContext();
 	}
 
@@ -73,6 +75,8 @@ export class Gamehandler {
 		console.log("Question:", question);
 		console.log("Answer:", answer);
 		console.log("Alternatives:", alternatives);
+		console.log("catagory:", catagory);
+
 		const alternativesArr = alternatives.split(",");
 		const quizQuestion = new Question(
 			0,
@@ -114,10 +118,11 @@ export class Gamehandler {
 		this.initButtonListeners();
 	};
 	catagoryBtnLogic = (event: any) => {
-		if (!event.target.textContent) {
-			throw new Error("Event target has no textcontent.");
+		const textContent = event.target.textContent;
+		if (textContent && event.target.tagName === "BUTTON") {
+			this.catagory = textContent;
+			console.log(this.catagory);
 		}
-		this.catagory = event.target.textContent;
 	};
 
 	startQuiz = async () => {
@@ -125,6 +130,11 @@ export class Gamehandler {
 
 		this.gameRender.questions = await this.dbContext.getShuffledQustions();
 		console.log(this.catagory);
+		if (this.catagory) {
+			this.gameRender.questions = this.gameRender.questions.filter(
+				(question) => question.catagory === this.catagory
+			);
+		}
 
 		this.currentQuestion = this.gameRender.questions[0];
 		this.gameRender.placeQuestionsInQuestionbox(

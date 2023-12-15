@@ -8,9 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { DbContext } from "./DbContext.js";
+import { GameRender } from "./GameRenderer.js";
 import { Question } from "./Question.js";
 export class Gamehandler {
-    constructor(gameRender) {
+    constructor(questions) {
         this.initEventListeners = () => {
             const startQuizBtn = this.getElement("quiz-start-btn");
             startQuizBtn.addEventListener("click", this.startQuiz);
@@ -61,6 +62,7 @@ export class Gamehandler {
             console.log("Question:", question);
             console.log("Answer:", answer);
             console.log("Alternatives:", alternatives);
+            console.log("catagory:", catagory);
             const alternativesArr = alternatives.split(",");
             const quizQuestion = new Question(0, question, answer, catagory, alternativesArr);
             this.dbContext.postNewQuestion(quizQuestion);
@@ -82,15 +84,19 @@ export class Gamehandler {
             this.initButtonListeners();
         });
         this.catagoryBtnLogic = (event) => {
-            if (!event.target.textContent) {
-                throw new Error("Event target has no textcontent.");
+            const textContent = event.target.textContent;
+            if (textContent && event.target.tagName === "BUTTON") {
+                this.catagory = textContent;
+                console.log(this.catagory);
             }
-            this.catagory = event.target.textContent;
         };
         this.startQuiz = () => __awaiter(this, void 0, void 0, function* () {
             console.log("Quiz started");
             this.gameRender.questions = yield this.dbContext.getShuffledQustions();
             console.log(this.catagory);
+            if (this.catagory) {
+                this.gameRender.questions = this.gameRender.questions.filter((question) => question.catagory === this.catagory);
+            }
             this.currentQuestion = this.gameRender.questions[0];
             this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion, this.gameRender.questions);
             this.initButtonListeners();
@@ -98,7 +104,8 @@ export class Gamehandler {
         this.handleError = (error) => {
             console.error(error);
         };
-        this.gameRender = gameRender;
+        this.questions = questions;
+        this.gameRender = new GameRender(this.questions, this);
         this.dbContext = new DbContext();
     }
     getElement(className) {
