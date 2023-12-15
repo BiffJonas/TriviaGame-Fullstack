@@ -1,4 +1,5 @@
 import { Question } from "./Question";
+import { Gamehandler } from "./ActionHandler.js";
 export class GameRender {
 	questions: Question[];
 	points: number;
@@ -45,5 +46,18 @@ export class GameRender {
 		if (userAnswer === correctAnswer) {
 			this.points++;
 		}
+	};
+	renderCatagoryUI = (): void => {
+		const catagory = document.querySelector(".quiz-area");
+		if (!catagory) throw new Error("no quiz area");
+
+		//TODO all of this feels incredibly horrible
+
+		catagory.innerHTML = `<h2>Catagories</h2>
+							<button class="btn btn-success">animals</button>
+							<button class="btn btn-success">Teachers</button>
+							<button class="btn btn-success">Math</button>`;
+		const gamehandler: Gamehandler = new Gamehandler(this);
+		gamehandler.initCatagoryButtons();
 	};
 }

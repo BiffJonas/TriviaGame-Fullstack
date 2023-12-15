@@ -8,8 +8,8 @@
     }
     public class AnswerData : IAnswerData
     {
-        public string? Input { get; set; }
-        public string? Answer { get; set; }
+        public string Input { get; set; }
+        public string Answer { get; set; } 
         public bool IsCorrect()
         {
             return this.Input == this.Answer;

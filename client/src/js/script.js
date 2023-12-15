@@ -13,10 +13,10 @@ import { DbContext } from "./DbContext.js";
 window.onload = function () {
     return __awaiter(this, void 0, void 0, function* () {
         const dbContext = new DbContext();
-        const questions = yield dbContext.fetchData();
+        const questions = yield dbContext.getAllQuestions();
         console.log(questions);
         const gameRender = new GameRender(questions);
-        const gamehandler = new Gamehandler(gameRender, questions);
+        const gamehandler = new Gamehandler(gameRender);
         try {
             gamehandler.initEventListeners();
         }

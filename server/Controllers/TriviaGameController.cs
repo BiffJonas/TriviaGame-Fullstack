@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 namespace server.Controllers
 {
     [ApiController]
@@ -12,12 +13,28 @@ namespace server.Controllers
         {
             this.dbHandler = dbHandler;
         }
-        [HttpGet("addcard")]
+        [HttpGet]
         [EnableCors("_myAllowSpecificOrigins")]
         public IActionResult GetAltCards()
         {
             var cards = dbHandler.GetAltCards();
             return Ok(cards);
+        }
+        [HttpGet("shuffle")]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public IActionResult GetSuffledAltCards()
+        {
+            List<AltQuestionCard> cards = dbHandler.GetAltCards().Shuffle();
+
+            return Ok(cards);
+        }
+        [HttpGet("{id}")]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public IActionResult GetCard(int id){
+            AltQuestionCard? card = dbHandler.GetCardById(id);
+
+            if(card == null) return NotFound("No card by that id");
+            return Ok(card);
         }
         //[HttpPost]
         //[EnableCors("_myAllowSpecificOrigins")]
@@ -31,7 +48,7 @@ namespace server.Controllers
         //    dbHandler.AddCard(card);
         //    return Ok();
         //}
-        [HttpPost]
+        [HttpPost("addcard")]
         [EnableCors("_myAllowSpecificOrigins")]
         public IActionResult AddCardToDatabase([FromBody] AltQuestionCard card)
         {

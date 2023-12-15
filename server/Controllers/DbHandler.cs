@@ -1,5 +1,7 @@
 ﻿using server.Data;
 using server;
+using System.Collections.Generic;
+
 namespace server.Controllers
 
 {
@@ -25,6 +27,10 @@ namespace server.Controllers
         {
             return dbContext.AltCards.ToList();
         }
+        public AltQuestionCard? GetCardById(int id)
+        {
+            return dbContext.AltCards.SingleOrDefault(card => card.Id == id);
+        }
         public void AddAltCard(AltQuestionCard card)
         {   
             //check for dupliacate
@@ -35,5 +41,6 @@ namespace server.Controllers
             dbContext.AltCards.Add(card);
             dbContext.SaveChanges();
         }
+
     }
 }

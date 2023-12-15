@@ -9,12 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 export class DbContext {
     constructor() {
-        this.url = "https://localhost:7076/api/triviagame";
-        this.fetchData = () => __awaiter(this, void 0, void 0, function* () {
+        this.url = "https://localhost:7076/api/triviagame/";
+        this.getAllQuestions = () => __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch(this.url);
             if (!response.ok)
                 throw new Error("Failed fetching data");
             return response.json();
+        });
+        this.getShuffledQustions = () => __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(this.url + "shuffle");
+            if (!response.ok)
+                throw new Error("Failed fetching shuffled questions");
+            return response.json();
+        });
+        this.getQuestionById = (id) => __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(this.url + id);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch question with id: ${id}`);
+            }
+            return yield response.json();
         });
         this.postNewQuestion = (question) => __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch(this.url, {
@@ -27,14 +40,14 @@ export class DbContext {
         });
         this.checkAnswer = (body) => __awaiter(this, void 0, void 0, function* () {
             //Wrong here
-            const response = yield fetch(this.url, {
+            const response = yield fetch(this.url + "validate", {
                 method: "POST",
                 headers: { "Content-type": "application/json" },
                 body: JSON.stringify(body),
             });
             if (!response.ok)
                 throw new Error("Failed to send response");
-            return yield response;
+            return yield response.json();
         });
     }
 }
