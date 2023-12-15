@@ -12,7 +12,7 @@ namespace server.Controllers
         {
             this.dbHandler = dbHandler;
         }
-        [HttpGet]
+        [HttpGet("addcard")]
         [EnableCors("_myAllowSpecificOrigins")]
         public IActionResult GetAltCards()
         {
@@ -43,5 +43,16 @@ namespace server.Controllers
             dbHandler.AddAltCard(card);
             return Ok();
         }
+        [HttpPost("validate")]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public IActionResult CheckAnswer([FromBody] AnswerData body)
+        {
+            if (body == null)
+            {
+                return BadRequest("Invalid submission");
+            }
+            return Ok(body.IsCorrect());
+        }
+
     }
 }

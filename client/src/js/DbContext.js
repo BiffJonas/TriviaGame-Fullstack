@@ -25,5 +25,16 @@ export class DbContext {
             if (!response.ok)
                 throw new Error("failed posting new question");
         });
+        this.checkAnswer = (body) => __awaiter(this, void 0, void 0, function* () {
+            //Wrong here
+            const response = yield fetch(this.url, {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(body),
+            });
+            if (!response.ok)
+                throw new Error("Failed to send response");
+            return yield response;
+        });
     }
 }

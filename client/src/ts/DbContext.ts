@@ -1,3 +1,4 @@
+import { AnswerData } from "./AnswerData";
 import { Question } from "./Question";
 
 export class DbContext {
@@ -14,5 +15,15 @@ export class DbContext {
 			body: JSON.stringify(question),
 		});
 		if (!response.ok) throw new Error("failed posting new question");
+	};
+	checkAnswer = async (body: AnswerData) => {
+		//Wrong here
+		const response = await fetch(this.url, {
+			method: "POST",
+			headers: { "Content-type": "application/json" },
+			body: JSON.stringify(body),
+		});
+		if (!response.ok) throw new Error("Failed to send response");
+		return await response;
 	};
 }

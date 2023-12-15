@@ -16,14 +16,14 @@ namespace server.Controllers
         {
             return dbContext.Cards.ToList();
         }
-        public List<AltQuestionCard> GetAltCards()
-        {
-            return dbContext.AltCards.ToList();
-        }
         public void AddCard(QuestionCard card)
         {
             dbContext.Cards.Add(card);
             dbContext.SaveChanges();
+        }
+        public List<AltQuestionCard> GetAltCards()
+        {
+            return dbContext.AltCards.ToList();
         }
         public void AddAltCard(AltQuestionCard card)
         {   

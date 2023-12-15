@@ -1,14 +1,18 @@
 import { DbContext } from "./DbContext.js";
 import { GameRender } from "./GameRenderer.js";
 import { Question } from "./Question.js";
+import { AnswerData } from "./AnswerData";
+
 export class Gamehandler {
 	gameRender: GameRender;
 	questions: Question[];
 	currentQuestion: Question | undefined;
+	dbContext: DbContext;
 
 	constructor(gameRender: GameRender, questions: Question[]) {
 		this.gameRender = gameRender;
 		this.questions = questions;
+		this.dbContext = new DbContext();
 	}
 
 	initEventListeners = () => {
@@ -64,8 +68,7 @@ export class Gamehandler {
 		const alternativesArr = alternatives.split(",");
 		const quizQuestion = new Question(0, question, answer, alternativesArr);
 
-		const dbContext = new DbContext();
-		dbContext.postNewQuestion(quizQuestion);
+		this.dbContext.postNewQuestion(quizQuestion);
 	};
 	getElement(className: string) {
 		const element = document.querySelector(`.${className}`);
@@ -74,30 +77,39 @@ export class Gamehandler {
 		return element;
 	}
 
-	addButtonInteraction = (event: any) => {
+	addButtonInteraction = async (event: any) => {
 		if (!event.target.textContent || !this.currentQuestion) {
 			throw new Error("Event target has no textcontent.");
 		}
-		console.log(event.target.textContent);
+		console.log();
+		const input = event.target.textContent;
+		const answer = this.currentQuestion.answer;
 
-		this.gameRender.validateAnswer(
-			event.target.textContent,
-			this.currentQuestion.answer
-		);
+		const answerData: AnswerData = { Input: input, Answer: answer };
+		const answerIsCorrect = await this.dbContext.checkAnswer(answerData);
+
+		
+		if(answerIsCorrect) this.gameRender.points++;  
+		
 		const nextQuestion = this.questions.indexOf(this.currentQuestion) + 1;
 		this.currentQuestion = this.questions[nextQuestion];
-		this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion);
+		this.gameRender.placeQuestionsInQuestionbox(
+			this.currentQuestion,
+			this.questions
+		);
 		this.initButtonListeners();
 	};
 
 	startQuiz = async () => {
 		console.log("Quiz started");
-		const dbContext = new DbContext();
-		this.questions = await dbContext.fetchData();
+		this.questions = await this.dbContext.fetchData();
 
 		//TODO Shuffle questions
 		this.currentQuestion = this.questions[0];
-		this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion);
+		this.gameRender.placeQuestionsInQuestionbox(
+			this.currentQuestion,
+			this.questions
+		);
 		this.initButtonListeners();
 	};
 

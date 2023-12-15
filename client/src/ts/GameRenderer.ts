@@ -19,8 +19,9 @@ export class GameRender {
 			)
 			.join("");
 	}
-	placeQuestionsInQuestionbox(quiz: any) {
+	placeQuestionsInQuestionbox(quiz: any, questions: Question[]) {
 		const QuizContainer = document.querySelector(".quiz-area");
+		this.questions = questions;
 		if (!QuizContainer) throw new Error("No quiz-area");
 		let content = "";
 		if (!quiz) {
