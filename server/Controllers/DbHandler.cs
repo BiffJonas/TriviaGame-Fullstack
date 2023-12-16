@@ -44,7 +44,7 @@ namespace server.Controllers
 
         public List<AltQuestionCard> GetCardsByCatagory(string catagory)
         {
-            return dbContext.AltCards.Where(card => card.Catagory == catagory).ToList();
+            return dbContext.AltCards.Where(card => card.Catagory == catagory).ToList().Shuffle();
         }
     }
 }

@@ -9,19 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { GameRender } from "./GameRenderer.js";
 import { Gamehandler } from "./ActionHandler.js";
-import { DbContext } from "./DbContext.js";
+import { handleError } from "./utils.js";
 window.onload = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        const dbContext = new DbContext();
-        const questions = yield dbContext.getAllQuestions();
-        console.log(questions);
-        const gameHandler = new Gamehandler(questions);
-        const gameRender = new GameRender(questions, gameHandler);
+        const gameHandler = new Gamehandler();
+        const gameRender = new GameRender(gameHandler);
         try {
             gameHandler.initEventListeners();
         }
         catch (error) {
-            gameHandler.handleError(error);
+            handleError(error);
         }
     });
 };

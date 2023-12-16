@@ -6,13 +6,4 @@ export class Question {
         this.catagory = catagory;
         this.alternatives = alternatives;
     }
-    getAnswer() {
-        return this.answer;
-    }
-    getQuestion() {
-        return this.question;
-    }
-    getAlternatives() {
-        return this.alternatives;
-    }
 }
