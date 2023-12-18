@@ -1,7 +1,7 @@
 import { DbContext } from "./DbContext.js";
 import { Question } from "./Question.js";
 import QuestionFormData from "./QuestionFormData.js";
-import { getValue, inputLinter, questionify, getElement } from "./utils.js";
+import { getElement } from "./utils.js";
 
 class FormHandler {
 	adminMode = (event: any) => {
