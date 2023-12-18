@@ -28,6 +28,7 @@ class FormHandler {
                             <div class="alternative-box"></div>
 
 							<h5>catagory</h5>
+                            <div>
 							<select class="quiz-catagory-input" name="catagory">
 								<option value="Animals">Animals</option>
 								<option value="Teachers">Teachers</option>
@@ -35,6 +36,7 @@ class FormHandler {
 								<option value="All">All</option>
 							</select>
 							<button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
 						</form>`;
 		const quizForm = getElement(".quizForm") as HTMLFormElement;
 		const altBox = getElement(".add-alternative");

@@ -10,7 +10,7 @@ export class GameRender {
 		this.points = 0;
 	}
 	renderQuestionHTML(question: string, alternatives: string[]): string {
-		return `<h1>${question}</h1> <div class="button-area">${this.renderAlternatives(
+		return `<h1 class="question-header">${question}</h1> <div class="button-area">${this.renderAlternatives(
 			alternatives
 		)}</div>`;
 	}

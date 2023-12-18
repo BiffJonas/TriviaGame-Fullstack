@@ -18,7 +18,7 @@ export class GameRender {
         this.points = 0;
     }
     renderQuestionHTML(question, alternatives) {
-        return `<h1>${question}</h1> <div class="button-area">${this.renderAlternatives(alternatives)}</div>`;
+        return `<h1 class="question-header">${question}</h1> <div class="button-area">${this.renderAlternatives(alternatives)}</div>`;
     }
     renderAlternatives(alternatives) {
         return alternatives
