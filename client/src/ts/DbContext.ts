@@ -1,5 +1,6 @@
 import { AnswerData } from "./AnswerData";
 import { Question } from "./Question";
+import QuestionFormData from "./QuestionFormData";
 
 export class DbContext {
 	url = "https://localhost:7076/api/triviagame/";
@@ -25,7 +26,7 @@ export class DbContext {
 		}
 		return await response.json();
 	};
-	postNewQuestion = async (question: Question) => {
+	postNewQuestion = async (question: QuestionFormData) => {
 		const response = await fetch(this.url + "addcard", {
 			method: "POST",
 			headers: { "Content-type": "application/json" },

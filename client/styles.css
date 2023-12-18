@@ -27,3 +27,23 @@ body {
 	font-family: bold;
 	margin: 0.1em;
 }
+.alternative-box {
+	display: flex;
+	margin-top: 1em;
+	justify-content: center;
+	align-self: center;
+	justify-self: center;
+	width: 50%;
+}
+
+.alt-input {
+	margin-bottom: 5px;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	width: 5em;
+}
+.quizForm {
+	display: grid;
+	place-content: center;
+}

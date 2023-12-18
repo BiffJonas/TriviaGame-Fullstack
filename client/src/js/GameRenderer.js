@@ -1,16 +1,17 @@
+import { getElement, initButtonListeners } from "./utils.js";
 export class GameRender {
     constructor(gameHandler) {
         this.renderCatagoryUI = () => {
-            const catagory = document.querySelector(".quiz-area");
+            const catagory = getElement(".quiz-area");
             if (!catagory)
                 throw new Error("no quiz area");
             //TODO all of this feels incredibly horrible
             catagory.innerHTML = `<div class="catagory-container">
 							<h2>Catagories</h2>
-							<button class="btn btn-success"value="Animals">Animals</button>
-							<button class="btn btn-success"value="Teachers">Teachers</button>
-							<button class="btn btn-success" value="Math">Math</button>
-							<button class="btn btn-success" value="All">All</button>
+							<button class="btn catagory btn-success"value="Animals">Animals</button>
+							<button class="btn catagory btn-success"value="Teachers">Teachers</button>
+							<button class="btn catagory btn-success" value="Math">Math</button>
+							<button class="btn catagory btn-success" value="All">All</button>
 							</div>`;
         };
         this.gameHandler = gameHandler;
@@ -38,6 +39,7 @@ export class GameRender {
             content = this.renderQuestionHTML(question, alternatives);
         }
         QuizContainer.innerHTML = content;
+        initButtonListeners(this.gameHandler.addButtonInteraction, ".alternative");
     }
     finishedQuiz() {
         if (!this.questions)

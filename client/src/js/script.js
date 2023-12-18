@@ -15,7 +15,7 @@ window.onload = function () {
         const gameHandler = new Gamehandler();
         const gameRender = new GameRender(gameHandler);
         try {
-            gameHandler.initEventListeners();
+            gameHandler.initControlButtons();
         }
         catch (error) {
             handleError(error);

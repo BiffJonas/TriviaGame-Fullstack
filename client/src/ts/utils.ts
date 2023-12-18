@@ -12,7 +12,7 @@ export const questionify = (question: string): string => {
 	return newString + "?";
 };
 export const getElement = (className: string) => {
-	const element = document.querySelector(`.${className}`);
+	const element = document.querySelector(`${className}`);
 	if (!element) throw new Error(`Class ${className} not found`);
 
 	return element;
@@ -26,3 +26,14 @@ export const getValue = (className: string): string => {
 	return (getElement(className) as HTMLInputElement).value;
 };
 export const handleError = (error: any) => console.error(error);
+export const initButtonListeners = (
+	logic: EventListenerOrEventListenerObject,
+	buttons: string
+) => {
+	//refactor into function with callback action and class name
+	const buttonList = document.querySelectorAll(buttons);
+	if (!buttonList) throw new Error("No button area");
+	buttonList.forEach((button) => {
+		button.addEventListener("click", logic);
+	});
+};

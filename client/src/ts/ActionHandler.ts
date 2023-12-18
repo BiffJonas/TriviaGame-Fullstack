@@ -2,8 +2,14 @@ import { DbContext } from "./DbContext.js";
 import { GameRender } from "./GameRenderer.js";
 import { Question } from "./Question.js";
 import { AnswerData } from "./AnswerData";
+
 import FormHandler from "./FormHandler.js";
-import { inputLinter, questionify, getElement } from "./utils.js";
+import {
+	inputLinter,
+	questionify,
+	getElement,
+	initButtonListeners,
+} from "./utils.js";
 
 export class Gamehandler {
 	gameRender: GameRender;
@@ -19,12 +25,30 @@ export class Gamehandler {
 		this.formHandler = new FormHandler();
 	}
 
-	initEventListeners = () => {
-		const startQuizBtn = getElement("quiz-start-btn");
-		startQuizBtn.addEventListener("click", this.startQuiz);
+	initControlButtons = () => {
+		initButtonListeners(this.startQuiz, ".quiz-start-btn");
 
-		const adminButton = getElement("admin-mode");
-		adminButton.addEventListener("click", this.formHandler.adminMode);
+		initButtonListeners(this.formHandler.adminMode, ".admin-mode");
+	};
+
+	catagoryBtnLogic = async (event: any) => {
+		const buttonValue = event.target.value;
+		console.log(buttonValue);
+
+		if (buttonValue) {
+			this.catagory = buttonValue;
+			console.log(this.catagory);
+			if (this.catagory && this.catagory !== "All") {
+				this.gameRender.questions =
+					await this.dbContext.getCatagoryQuestions(this.catagory);
+			} else {
+				this.gameRender.questions =
+					await this.dbContext.getShuffledQustions();
+			}
+		}
+		console.log(this.gameRender.questions);
+
+		this.firstQuestion();
 	};
 
 	addButtonInteraction = async (event: any) => {
@@ -41,27 +65,8 @@ export class Gamehandler {
 
 		if (answerIsCorrect) this.gameRender.points++;
 		this.nextQuestion();
-
-		this.initButtonListeners();
 	};
-	catagoryBtnLogic = async (event: any) => {
-		const buttonValue = event.target.value;
-		console.log(buttonValue);
 
-		if (buttonValue) {
-			this.catagory = buttonValue;
-			console.log(this.catagory);
-			if (this.catagory && this.catagory !== "All") {
-				this.gameRender.questions =
-					await this.dbContext.getCatagoryQuestions(this.catagory);
-			} else {
-				this.gameRender.questions =
-					await this.dbContext.getShuffledQustions();
-			}
-		}
-		this.firstQuestion();
-		this.initButtonListeners();
-	};
 	firstQuestion = () => {
 		const questions: Question[] | undefined = this.gameRender.questions;
 		if (!questions) throw new Error("questions are not defined");
@@ -70,7 +75,7 @@ export class Gamehandler {
 			this.currentQuestion,
 			questions
 		);
-		this.initButtonListeners();
+		console.log("placed questions");
 	};
 	nextQuestion = () => {
 		const questions: Question[] | undefined = this.gameRender.questions;
@@ -84,24 +89,12 @@ export class Gamehandler {
 			this.currentQuestion,
 			questions
 		);
-
-		this.initButtonListeners();
 	};
 
 	startQuiz = async () => {
 		console.log("Quiz started");
 		this.gameRender.points = 0;
 		this.gameRender.renderCatagoryUI();
-		this.initCatagoryButtons();
+		initButtonListeners(this.catagoryBtnLogic, ".catagory");
 	};
-
-	initButtonListeners() {
-		const buttonContainer = document.querySelector(".button-area");
-		if (!buttonContainer) throw new Error("No button Area");
-		buttonContainer.addEventListener("click", this.addButtonInteraction);
-	}
-	initCatagoryButtons() {
-		const quizArea = getElement("catagory-container");
-		quizArea.addEventListener("click", this.catagoryBtnLogic);
-	}
 }

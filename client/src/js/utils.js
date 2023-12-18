@@ -11,7 +11,7 @@ export const questionify = (question) => {
     return newString + "?";
 };
 export const getElement = (className) => {
-    const element = document.querySelector(`.${className}`);
+    const element = document.querySelector(`${className}`);
     if (!element)
         throw new Error(`Class ${className} not found`);
     return element;
@@ -22,6 +22,15 @@ export const removeSpecial = (input) => {
     return newString;
 };
 export const getValue = (className) => {
-    getElement(className).value;
+    return getElement(className).value;
 };
 export const handleError = (error) => console.error(error);
+export const initButtonListeners = (logic, buttons) => {
+    //refactor into function with callback action and class name
+    const buttonList = document.querySelectorAll(buttons);
+    if (!buttonList)
+        throw new Error("No button area");
+    buttonList.forEach((button) => {
+        button.addEventListener("click", logic);
+    });
+};

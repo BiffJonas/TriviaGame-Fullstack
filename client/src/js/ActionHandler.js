@@ -10,30 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { DbContext } from "./DbContext.js";
 import { GameRender } from "./GameRenderer.js";
 import FormHandler from "./FormHandler.js";
-import { getElement } from "./utils.js";
+import { initButtonListeners, } from "./utils.js";
 export class Gamehandler {
     constructor() {
-        this.initEventListeners = () => {
-            const startQuizBtn = getElement("quiz-start-btn");
-            startQuizBtn.addEventListener("click", this.startQuiz);
-            const adminButton = getElement("admin-mode");
-            adminButton.addEventListener("click", this.formHandler.adminMode);
+        this.initControlButtons = () => {
+            initButtonListeners(this.startQuiz, ".quiz-start-btn");
+            initButtonListeners(this.formHandler.adminMode, ".admin-mode");
         };
-        this.addButtonInteraction = (event) => __awaiter(this, void 0, void 0, function* () {
-            if (!event.target.textContent || !this.currentQuestion) {
-                throw new Error("Event target has no textcontent.");
-            }
-            const input = event.target.textContent;
-            const answer = this.currentQuestion.answer;
-            console.log(input);
-            const answerData = { Input: input, Answer: answer };
-            const answerIsCorrect = yield this.dbContext.checkAnswer(answerData);
-            console.log(answerIsCorrect);
-            if (answerIsCorrect)
-                this.gameRender.points++;
-            this.nextQuestion();
-            this.initButtonListeners();
-        });
         this.catagoryBtnLogic = (event) => __awaiter(this, void 0, void 0, function* () {
             const buttonValue = event.target.value;
             console.log(buttonValue);
@@ -49,8 +32,22 @@ export class Gamehandler {
                         yield this.dbContext.getShuffledQustions();
                 }
             }
+            console.log(this.gameRender.questions);
             this.firstQuestion();
-            this.initButtonListeners();
+        });
+        this.addButtonInteraction = (event) => __awaiter(this, void 0, void 0, function* () {
+            if (!event.target.textContent || !this.currentQuestion) {
+                throw new Error("Event target has no textcontent.");
+            }
+            const input = event.target.textContent;
+            const answer = this.currentQuestion.answer;
+            console.log(input);
+            const answerData = { Input: input, Answer: answer };
+            const answerIsCorrect = yield this.dbContext.checkAnswer(answerData);
+            console.log(answerIsCorrect);
+            if (answerIsCorrect)
+                this.gameRender.points++;
+            this.nextQuestion();
         });
         this.firstQuestion = () => {
             const questions = this.gameRender.questions;
@@ -58,7 +55,7 @@ export class Gamehandler {
                 throw new Error("questions are not defined");
             this.currentQuestion = questions[0];
             this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion, questions);
-            this.initButtonListeners();
+            console.log("placed questions");
         };
         this.nextQuestion = () => {
             const questions = this.gameRender.questions;
@@ -68,26 +65,15 @@ export class Gamehandler {
             const nextQuestion = questions.indexOf(this.currentQuestion) + 1;
             this.currentQuestion = questions[nextQuestion];
             this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion, questions);
-            this.initButtonListeners();
         };
         this.startQuiz = () => __awaiter(this, void 0, void 0, function* () {
             console.log("Quiz started");
             this.gameRender.points = 0;
             this.gameRender.renderCatagoryUI();
-            this.initCatagoryButtons();
+            initButtonListeners(this.catagoryBtnLogic, ".catagory");
         });
         this.gameRender = new GameRender(this);
         this.dbContext = new DbContext();
         this.formHandler = new FormHandler();
-    }
-    initButtonListeners() {
-        const buttonContainer = document.querySelector(".button-area");
-        if (!buttonContainer)
-            throw new Error("No button Area");
-        buttonContainer.addEventListener("click", this.addButtonInteraction);
-    }
-    initCatagoryButtons() {
-        const quizArea = getElement("catagory-container");
-        quizArea.addEventListener("click", this.catagoryBtnLogic);
     }
 }

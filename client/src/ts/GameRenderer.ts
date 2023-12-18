@@ -1,5 +1,6 @@
 import { Question } from "./Question";
 import { Gamehandler } from "./ActionHandler.js";
+import { getElement, initButtonListeners } from "./utils.js";
 export class GameRender {
 	questions: Question[] | undefined;
 	gameHandler: Gamehandler;
@@ -34,6 +35,11 @@ export class GameRender {
 		}
 
 		QuizContainer.innerHTML = content;
+
+		initButtonListeners(
+			this.gameHandler.addButtonInteraction,
+			".alternative"
+		);
 	}
 	finishedQuiz(): string {
 		if (!this.questions) throw new Error("Questions are not defined");
@@ -42,17 +48,17 @@ export class GameRender {
 		return finishedText;
 	}
 	renderCatagoryUI = (): void => {
-		const catagory = document.querySelector(".quiz-area");
+		const catagory = getElement(".quiz-area");
 		if (!catagory) throw new Error("no quiz area");
 
 		//TODO all of this feels incredibly horrible
 
 		catagory.innerHTML = `<div class="catagory-container">
 							<h2>Catagories</h2>
-							<button class="btn btn-success"value="Animals">Animals</button>
-							<button class="btn btn-success"value="Teachers">Teachers</button>
-							<button class="btn btn-success" value="Math">Math</button>
-							<button class="btn btn-success" value="All">All</button>
+							<button class="btn catagory btn-success"value="Animals">Animals</button>
+							<button class="btn catagory btn-success"value="Teachers">Teachers</button>
+							<button class="btn catagory btn-success" value="Math">Math</button>
+							<button class="btn catagory btn-success" value="All">All</button>
 							</div>`;
 	};
 }
