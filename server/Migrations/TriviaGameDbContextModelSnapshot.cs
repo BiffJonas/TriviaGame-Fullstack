@@ -36,7 +36,7 @@ namespace server.Migrations
                     b.Property<string>("Answer")
                         .HasColumnType("text");
 
-                    b.Property<string>("Catagory")
+                    b.Property<string>("Category")
                         .HasColumnType("text");
 
                     b.Property<string>("Question")

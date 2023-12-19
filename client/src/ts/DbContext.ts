@@ -27,12 +27,17 @@ export class DbContext {
 		return await response.json();
 	};
 	postNewQuestion = async (question: QuestionFormData) => {
+		console.log(question);
+
 		const response = await fetch(this.url + "addcard", {
 			method: "POST",
 			headers: { "Content-type": "application/json" },
 			body: JSON.stringify(question),
 		});
-		if (!response.ok) throw new Error("failed posting new question");
+		if (!response.ok) {
+			throw new Error("failed posting new question");
+		}
+		console.log("New Question Added");
 	};
 	checkAnswer = async (body: AnswerData) => {
 		//Wrong here

@@ -42,9 +42,9 @@ namespace server.Controllers
             dbContext.SaveChanges();
         }
 
-        public List<AltQuestionCard> GetCardsByCatagory(string catagory)
+        public List<AltQuestionCard> GetCardsByCatagory(string category)
         {
-            return dbContext.AltCards.Where(card => card.Catagory == catagory).ToList().Shuffle();
+            return dbContext.AltCards.Where(card => card.Category == category).ToList().Shuffle();
         }
     }
 }

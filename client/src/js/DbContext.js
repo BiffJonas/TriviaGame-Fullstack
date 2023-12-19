@@ -36,13 +36,16 @@ export class DbContext {
             return yield response.json();
         });
         this.postNewQuestion = (question) => __awaiter(this, void 0, void 0, function* () {
+            console.log(question);
             const response = yield fetch(this.url + "addcard", {
                 method: "POST",
                 headers: { "Content-type": "application/json" },
                 body: JSON.stringify(question),
             });
-            if (!response.ok)
+            if (!response.ok) {
                 throw new Error("failed posting new question");
+            }
+            console.log("New Question Added");
         });
         this.checkAnswer = (body) => __awaiter(this, void 0, void 0, function* () {
             //Wrong here

@@ -1,7 +1,8 @@
 import { DbContext } from "./DbContext.js";
+import { InputBox } from "./InputBox.js";
 import { Question } from "./Question.js";
 import QuestionFormData from "./QuestionFormData.js";
-import { getElement } from "./utils.js";
+import { getElement, initButtonListeners } from "./utils.js";
 
 class FormHandler {
 	adminMode = (event: any) => {
@@ -14,12 +15,6 @@ class FormHandler {
 								type="text"
                                 name="question"
 							/>
-							<h5>answer</h5>
-							<input
-								class="quiz-answer-input"
-								type="text"
-                                name="answer"
-							/>
 							<h5>alternatives</h5>
                             <button class="add-alternative btn btn-warning"
                             type="button">
@@ -28,15 +23,13 @@ class FormHandler {
                             <div class="alternative-box"></div>
 
 							<h5>catagory</h5>
-                            <div>
-							<select class="quiz-catagory-input" name="catagory">
+							<select class="quiz-catagory-input" name="category">
 								<option value="Animals">Animals</option>
-								<option value="Teachers">Teachers</option>
+								<option value="Teachers" selected>Teachers</option>
 								<option value="Math">Math</option>
 								<option value="All">All</option>
 							</select>
 							<button class="btn btn-primary" type="submit">Submit</button>
-                            </div>
 						</form>`;
 		const quizForm = getElement(".quizForm") as HTMLFormElement;
 		const altBox = getElement(".add-alternative");
@@ -48,6 +41,13 @@ class FormHandler {
 		event.preventDefault();
 
 		//special characters cant be linted.
+		const alternatives = document.querySelectorAll(
+			".alt-input"
+		) as NodeListOf<HTMLInputElement>;
+		const valuesArray: string[] = Array.from(alternatives).map(
+			(input) => input.value
+		);
+
 		const formData: QuestionFormData = this.getInputValues().lintFormData();
 
 		console.log(formData);
@@ -68,6 +68,19 @@ class FormHandler {
 			"beforeend",
 			`<input class="alt-input">`
 		);
+		alternativeBox.childNodes.forEach((inputBox) =>
+			inputBox.addEventListener("dblclick", this.inputLogic)
+		);
+	};
+	inputLogic = (e: Event) => {
+		const inputBox = e.target as InputBox;
+		inputBox.isAnswer = !inputBox.isAnswer;
+		if (inputBox.isAnswer) {
+			inputBox.style.backgroundColor = "green";
+		} else {
+			inputBox.style.backgroundColor = "white";
+		}
+		console.log(inputBox.isAnswer);
 	};
 }
 
