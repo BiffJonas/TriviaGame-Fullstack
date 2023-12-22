@@ -59,9 +59,21 @@ namespace server.Controllers
         [EnableCors("_myAllowSpecificOrigins")]
         public IActionResult AddCardToDatabase([FromBody] AltQuestionCard card)
         {
+          
             if (card == null)
             {
                 return BadRequest("Invalid card data");
+            }
+            bool isDuplicate = dbHandler.GetAltCards().Any(cardInDb => cardInDb.Question == card.Question);
+            if(isDuplicate)
+            {
+                return BadRequest("Cannot add duplicate question");
+            }
+
+            bool alternativeExists = card.Alternatives.Count > 0;
+            if(!alternativeExists)
+            {
+                return BadRequest("There must be atleast one alternative");
             }
 
             dbHandler.AddAltCard(card);

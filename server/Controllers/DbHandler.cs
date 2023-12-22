@@ -40,6 +40,7 @@ namespace server.Controllers
             //de måste finnas 4 alternativ
             dbContext.AltCards.Add(card);
             dbContext.SaveChanges();
+          
         }
 
         public List<AltQuestionCard> GetCardsByCatagory(string category)
