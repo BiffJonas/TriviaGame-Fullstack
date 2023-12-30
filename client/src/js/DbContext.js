@@ -35,6 +35,24 @@ export class DbContext {
             }
             return yield response.json();
         });
+        this.getNextQuestion = () => __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(this.url + `nextQuestion`);
+            if (!response.ok) {
+                throw new Error("failed fetching next question");
+            }
+            return yield response.json();
+        });
+        this.postSelectedCatagory = (index) => __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(this.url + "category", {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(index),
+            });
+            if (!response.ok) {
+                throw new Error("failed posting new question");
+            }
+            return yield response.json();
+        });
         this.postNewQuestion = (question) => __awaiter(this, void 0, void 0, function* () {
             console.log(question);
             const response = yield fetch(this.url + "addcard", {

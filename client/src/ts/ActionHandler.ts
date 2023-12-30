@@ -10,7 +10,6 @@ import {
 	getElement,
 	initButtonListeners,
 } from "./utils.js";
-
 export class Gamehandler {
 	gameRender: GameRender;
 	currentQuestion: Question | undefined;
@@ -39,14 +38,12 @@ export class Gamehandler {
 			this.catagory = buttonValue;
 			console.log(this.catagory);
 			if (this.catagory && this.catagory !== "All") {
-				this.gameRender.questions =
-					await this.dbContext.getCatagoryQuestions(this.catagory);
+                await this.dbContext.postSelectedCatagory(this.catagory);
 			} else {
 				this.gameRender.questions =
 					await this.dbContext.getShuffledQustions();
 			}
 		}
-		console.log(this.gameRender.questions);
 
 		this.firstQuestion();
 	};
@@ -67,13 +64,10 @@ export class Gamehandler {
 		this.nextQuestion();
 	};
 
-	firstQuestion = () => {
-		const questions: Question[] | undefined = this.gameRender.questions;
-		if (!questions) throw new Error("questions are not defined");
-		this.currentQuestion = questions[0];
-		this.gameRender.placeQuestionsInQuestionbox(
-			this.currentQuestion,
-			questions
+	firstQuestion = async () => {
+		this.currentQuestion = await this.dbContext.getNextQuestion();
+        if(!this.currentQuestion) throw new Error("No Questions left")
+		this.gameRender.placeQuestionsInQuestionbox( this.currentQuestion,
 		);
 		console.log("placed questions");
 	};
@@ -87,7 +81,6 @@ export class Gamehandler {
 		this.currentQuestion = questions[nextQuestion];
 		this.gameRender.placeQuestionsInQuestionbox(
 			this.currentQuestion,
-			questions
 		);
 	};
 

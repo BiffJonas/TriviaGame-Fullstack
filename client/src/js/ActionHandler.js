@@ -24,15 +24,13 @@ export class Gamehandler {
                 this.catagory = buttonValue;
                 console.log(this.catagory);
                 if (this.catagory && this.catagory !== "All") {
-                    this.gameRender.questions =
-                        yield this.dbContext.getCatagoryQuestions(this.catagory);
+                    yield this.dbContext.postSelectedCatagory(this.catagory);
                 }
                 else {
                     this.gameRender.questions =
                         yield this.dbContext.getShuffledQustions();
                 }
             }
-            console.log(this.gameRender.questions);
             this.firstQuestion();
         });
         this.addButtonInteraction = (event) => __awaiter(this, void 0, void 0, function* () {
@@ -49,14 +47,13 @@ export class Gamehandler {
                 this.gameRender.points++;
             this.nextQuestion();
         });
-        this.firstQuestion = () => {
-            const questions = this.gameRender.questions;
-            if (!questions)
-                throw new Error("questions are not defined");
-            this.currentQuestion = questions[0];
-            this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion, questions);
+        this.firstQuestion = () => __awaiter(this, void 0, void 0, function* () {
+            this.currentQuestion = yield this.dbContext.getNextQuestion();
+            if (!this.currentQuestion)
+                throw new Error("No Questions left");
+            this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion);
             console.log("placed questions");
-        };
+        });
         this.nextQuestion = () => {
             const questions = this.gameRender.questions;
             if (!questions || !this.currentQuestion) {
@@ -64,7 +61,7 @@ export class Gamehandler {
             }
             const nextQuestion = questions.indexOf(this.currentQuestion) + 1;
             this.currentQuestion = questions[nextQuestion];
-            this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion, questions);
+            this.gameRender.placeQuestionsInQuestionbox(this.currentQuestion);
         };
         this.startQuiz = () => __awaiter(this, void 0, void 0, function* () {
             console.log("Quiz started");

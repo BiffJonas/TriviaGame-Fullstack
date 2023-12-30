@@ -1,6 +1,6 @@
 using server.Controllers;
 using server.Data;
-
+using server;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -20,6 +20,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddDbContext<TriviaGameDbContext>();
 builder.Services.AddScoped<DbHandler>();
+
+builder.Services.AddScoped<AltQuestionCard>();
+builder.Services.AddScoped<QuizHandler>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

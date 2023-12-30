@@ -20,27 +20,25 @@ export class GameRender {
 				(alternative) =>
 					`<button class="btn alternative btn-success">${alternative}</button>`
 			)
-			.join("");
-	}
-	placeQuestionsInQuestionbox(quiz: any, questions: Question[]) {
-		const QuizContainer = document.querySelector(".quiz-area");
-		this.questions = questions;
-		if (!QuizContainer) throw new Error("No quiz-area");
-		let content = "";
-		if (!quiz) {
-			content = this.finishedQuiz();
-		} else {
-			const { question, alternatives } = quiz;
-			content = this.renderQuestionHTML(question, alternatives);
-		}
+            .join("");
+    }
+    placeQuestionsInQuestionbox(quiz: any) {
+        const QuizContainer = document.querySelector(".quiz-area");
+        if (!QuizContainer) throw new Error("No quiz-area");
+        let content = "";
+        if (!quiz) {
+            content = this.finishedQuiz();
+        } else {
+            const { question, alternatives } = quiz;
+            content = this.renderQuestionHTML(question, alternatives); }
 
-		QuizContainer.innerHTML = content;
+            QuizContainer.innerHTML = content;
 
-		initButtonListeners(
-			this.gameHandler.addButtonInteraction,
-			".alternative"
-		);
-	}
+            initButtonListeners(
+                this.gameHandler.addButtonInteraction,
+                ".alternative"
+            );
+    }
 	finishedQuiz(): string {
 		if (!this.questions) throw new Error("Questions are not defined");
 		const finishedText = `<h1>Quiz Completed</h1> <div class="button-area"><h2>Your Score: ${this.points}/${this.questions.length}</h2></div>`;

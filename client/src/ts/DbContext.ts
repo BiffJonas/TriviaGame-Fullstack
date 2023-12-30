@@ -26,6 +26,28 @@ export class DbContext {
 		}
 		return await response.json();
 	};
+
+    getNextQuestion = async (): Promise<Question> => {
+        
+		const response = await fetch(this.url + `nextQuestion`);
+		if (!response.ok) {
+			throw new Error("failed fetching next question");
+		}
+        return await response.json();
+    }
+    postSelectedCatagory = async (index: string):Promise<Boolean> => {
+        
+		const response = await fetch(this.url + "category", {
+			method: "POST",
+			headers: { "Content-type": "application/json" },
+			body: JSON.stringify(index),
+		});
+		if (!response.ok) {
+			throw new Error("failed posting new question");
+		}
+        return await response.json();
+    }
+
 	postNewQuestion = async (question: QuestionFormData) => {
 		console.log(question);
 

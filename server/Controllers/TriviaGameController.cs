@@ -8,9 +8,11 @@ namespace server.Controllers
     public class TriviaGameController : ControllerBase
     {
         private readonly DbHandler dbHandler;
-
-        public TriviaGameController(DbHandler dbHandler)
+        private readonly QuizHandler quizHandler;
+        // Constructor with dependency injection
+        public TriviaGameController(DbHandler dbHandler, QuizHandler quizHandler)
         {
+            this.quizHandler = quizHandler;
             this.dbHandler = dbHandler;
         }
         [HttpGet]
@@ -19,6 +21,43 @@ namespace server.Controllers
         {
             var cards = dbHandler.GetAltCards();
             return Ok(cards);
+        }
+
+        [HttpGet("nextQuestion")]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public IActionResult GetNextQuestion()
+        {
+            try
+            {
+
+                int nextIndex = quizHandler.CurrentQuiz.IndexOf(quizHandler.CurrentQuestion) + 1;
+                if (nextIndex < quizHandler.CurrentQuiz.Count)
+                {
+                    AltQuestionCard cardToSend = quizHandler.CurrentQuestion;
+                    quizHandler.CurrentQuestion = quizHandler.CurrentQuiz[nextIndex];
+                    return Ok(cardToSend);
+                }else return BadRequest("card is null");
+            }
+
+
+
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        [HttpPost("category")]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public IActionResult GetCardsByCatagory([FromBody] string catagory){
+            quizHandler.CurrentCategory = catagory;
+            List<AltQuestionCard> cards = dbHandler.GetCardsByCatagory(catagory);
+            quizHandler.CurrentQuiz = cards;
+            quizHandler.CurrentQuestion = cards[0];
+            bool result = quizHandler.CurrentQuiz != null;
+            return Ok(result);
         }
         [HttpGet("shuffle")]
         [EnableCors("_myAllowSpecificOrigins")]
@@ -35,31 +74,13 @@ namespace server.Controllers
 
             if(card == null) return NotFound("No card by that id");
             return Ok(card);
-        }
-        [HttpGet("catagory/{catagory}")]
-        [EnableCors("_myAllowSpecificOrigins")]
-        public IActionResult GetCardsByCatagory(string catagory){
-            List<AltQuestionCard> cards = dbHandler.GetCardsByCatagory(catagory);
-            return Ok(cards);
-        }
-        
-        //[HttpPost]
-        //[EnableCors("_myAllowSpecificOrigins")]
-        //public IActionResult AddCardToDatabase([FromBody] QuestionCard card)
-        //{
-        //    if (card == null)
-        //    {
-        //        return BadRequest("Invalid card data");
-        //    }
 
-        //    dbHandler.AddCard(card);
-        //    return Ok();
-        //}
+        }
         [HttpPost("addcard")]
         [EnableCors("_myAllowSpecificOrigins")]
         public IActionResult AddCardToDatabase([FromBody] AltQuestionCard card)
         {
-          
+
             if (card == null)
             {
                 return BadRequest("Invalid card data");
@@ -75,6 +96,7 @@ namespace server.Controllers
             {
                 return BadRequest("There must be atleast one alternative");
             }
+
 
             dbHandler.AddAltCard(card);
             return Ok();

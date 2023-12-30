@@ -25,9 +25,8 @@ export class GameRender {
             .map((alternative) => `<button class="btn alternative btn-success">${alternative}</button>`)
             .join("");
     }
-    placeQuestionsInQuestionbox(quiz, questions) {
+    placeQuestionsInQuestionbox(quiz) {
         const QuizContainer = document.querySelector(".quiz-area");
-        this.questions = questions;
         if (!QuizContainer)
             throw new Error("No quiz-area");
         let content = "";
